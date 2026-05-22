@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # DP Coaching Center - MERN Platform
 
 A premium coaching institute website and notes portal built on the MongoDB, Express, React (Vite), Node.js (MERN) stack. It includes a custom secure JWT authentication system, a student portal with notes & PYQs filtering, and a powerful admin dashboard featuring aggregated upload activity charts.
@@ -102,3 +103,7 @@ The frontend is configured with a `vercel.json` rewrite file to support client-s
    - Access student Notes and PYQs pages.
    - Verify that skeleton loading cards display while data fetches.
    - Test search queries, subject selectors, and class/year selectors.
+=======
+# dp-coaching-center
+DP Coaching Center is a full-stack MERN coaching platform with Admin &amp; Student Authentication, PDF Notes Upload, PYQ Management, Cloudinary storage, MongoDB integration, JWT security, and responsive modern UI built using React.js, Node.js, Express.js, MongoDB, Tailwind CSS, and Cloudinary.
+>>>>>>> d54a70b366ac004497629650fbef2a7cbcb7600e
