@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 
 const connectDB = require("./config/db");
-const cloudinary = require("./config/cloudinary");
+require("./config/cloudinary");
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
@@ -16,22 +16,26 @@ const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
-// Connect Database
+// Database Connection
 connectDB();
 
-// Middleware
+// CORS FIX
 app.use(
     cors({
-        origin: "*",
+        origin: [
+            "http://localhost:5173",
+            "https://dp-coaching-center.vercel.app",
+        ],
         methods: ["GET", "POST", "PUT", "DELETE"],
-        credentials: true,
+        allowedHeaders: ["Content-Type", "Authorization"],
     })
 );
 
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", noteRoutes);
 app.use("/api/pyq", pyqRoutes);
@@ -41,20 +45,20 @@ app.use("/api/admin", adminRoutes);
 
 // Root Route
 app.get("/", (req, res) => {
-    res.send("DP Coaching Center API is running...");
+    res.send("DP Coaching Center API Running...");
 });
 
-// Global Error Handler
+// Error Handler
 app.use((err, req, res, next) => {
-    console.error("Global Error:", err.message);
+    console.error(err.stack);
 
-    res.status(err.status || 500).json({
+    res.status(500).json({
         success: false,
-        message: err.message || "Internal Server Error",
+        message: "Server Error",
     });
 });
 
-// Server
+// Start Server
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
