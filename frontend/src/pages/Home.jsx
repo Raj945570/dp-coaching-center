@@ -1,11 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, BookOpen, Star, TrendingUp, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import Founder from '../components/Founder';
 
 const Home = () => {
   const { t } = useTranslation();
+  const [token, setToken] = useState(localStorage.getItem('token') || '');
+  const [username, setUsername] = useState(localStorage.getItem('userName') || '');
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (token) {
+        try {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          };
+          const { data } = await axios.get(`${API_BASE_URL}/api/user/profile`, config);
+          if (data && data.name) {
+            setUsername(data.name);
+            localStorage.setItem('userName', data.name);
+          }
+        } catch (error) {
+          console.error('Failed to fetch user profile in Home:', error);
+          if (error.response?.status === 401 || error.response?.status === 403) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userName');
+            setToken('');
+            setUsername('');
+          }
+        }
+      }
+    };
+    fetchUserProfile();
+  }, [token]);
 
   const features = [
     { icon: <BookOpen className="h-8 w-8 text-brand-primary" />, title: t('Expert Notes'), desc: t('ExpertNotesDesc') },
@@ -29,9 +61,15 @@ const Home = () => {
             {t('Expert guidance')} <span className="font-semibold text-slate-800 dark:text-white">Dhanraj Prajapati</span>.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link to="/login" className="px-8 py-4 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-lg dark:hover:bg-slate-200 hover:bg-slate-800 hover:shadow-xl transition-all flex items-center justify-center gap-2">
-              {t('Join Now')} <ArrowRight className="h-5 w-5" />
-            </Link>
+            {token ? (
+              <Link to="/profile" className="welcome-btn px-8 py-4 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-lg dark:hover:bg-slate-200 hover:bg-slate-800 hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                Welcome, {username}
+              </Link>
+            ) : (
+              <Link to="/login" className="join-btn px-8 py-4 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-lg dark:hover:bg-slate-200 hover:bg-slate-800 hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                {t('Join Now')} <ArrowRight className="h-5 w-5" />
+              </Link>
+            )}
             <Link to="/subjects" className="glass dark:glass-dark px-8 py-4 rounded-full text-slate-700 dark:text-slate-200 font-semibold text-lg hover:shadow-lg transition-all flex items-center justify-center">
               {t('Explore Subjects')}
             </Link>

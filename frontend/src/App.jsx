@@ -29,7 +29,7 @@ function App() {
       <Routes>
         {/* Main User Routes wrapped in Layout */}
         <Route path="/" element={<Layout />}>
-          <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ResetPassword />} />

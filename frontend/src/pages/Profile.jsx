@@ -33,9 +33,13 @@ const Profile = () => {
         };
         const { data } = await axios.get(`${API_BASE_URL}/api/user/profile`, config);
         setProfileData(data);
+        if (data && data.name) {
+          localStorage.setItem('userName', data.name);
+        }
       } catch (error) {
         toast.error('Failed to load profile. Please login again.');
         localStorage.removeItem('token');
+        localStorage.removeItem('userName');
         navigate('/login');
       }
     };
@@ -45,6 +49,7 @@ const Profile = () => {
   const handleSave = (e) => {
     e.preventDefault();
     setIsSaved(true);
+    localStorage.setItem('userName', profileData.name);
     toast.success('Profile saved temporarily! (Backend update pending)');
     setTimeout(() => setIsSaved(false), 3000);
   };

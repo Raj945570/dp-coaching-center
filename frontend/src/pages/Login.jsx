@@ -73,6 +73,7 @@ const Login = () => {
         navigate('/admin/dashboard');
       } else {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('userName', data.name);
         toast.success(t('Login successful!'));
         navigate('/');
       }
@@ -113,6 +114,7 @@ const Login = () => {
       const { data } = await axios.post(`${API_BASE_URL}/api/auth/register`, registerData);
       toast.success(t('Registration successful!'));
       localStorage.setItem('token', data.token);
+      localStorage.setItem('userName', data.name);
       navigate('/');
     } catch (err) {
       toast.error(err.response?.data?.message || t('Registration failed. Please try again.'));

@@ -16,6 +16,7 @@ const Navbar = ({ toggleTheme, theme }) => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userName');
     toast.success(t('Logged out successfully!'));
     setIsOpen(false);
     navigate('/login');
